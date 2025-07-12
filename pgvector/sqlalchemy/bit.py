@@ -27,10 +27,10 @@ class BIT(UserDefinedType):
             return val
         return process
 
-    def literal_processor(): 
+    # def literal_processor(): 
         ... # TODO
 
-    def result_processor():
+    # def result_processor():
         ... # TODO You need this one to pass the tests
 
     class comparator_factory(UserDefinedType.Comparator):
