@@ -6,4 +6,5 @@ venv/
 *.pyc
 __pycache__
 .pytest_cache/
+test_bench.ipynb
 examples/rag/README.md
