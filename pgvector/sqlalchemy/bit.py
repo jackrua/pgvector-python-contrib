@@ -18,21 +18,17 @@ class BIT(UserDefinedType):
 
     def bind_processor(self, dialect):
         def process(value):
-            if isinstance(dialect, PGDialect_asyncpg): 
-                if value is None: 
-                    return None
-                return asyncpg.BitString(Bit._to_db(value))
-            return Bit._to_db(value)
+            value = Bit._to_db(value)
+            if value and isinstance(dialect, PGDialect_asyncpg): 
+                return asyncpg.BitString(value)
+            return value
         return process
     
     def result_processor(self, dialect, coltype):
         def process(value): 
-            if isinstance(dialect, PGDialect_asyncpg):
-                if value is None:
-                    return None
-                print(value)
-                return Bit(value.as_string())
-            return Bit(value)
+            if value and isinstance(dialect, PGDialect_asyncpg):
+                return value.as_string()
+            return Bit._from_db(value)
         return process
 
     class comparator_factory(UserDefinedType.Comparator):
