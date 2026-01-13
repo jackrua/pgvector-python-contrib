@@ -1,4 +1,4 @@
-.PHONY: lint build publish clean
+.PHONY: lint build publish clean docs docs-serve
 
 lint:
 	pycodestyle . --ignore=E501
@@ -11,3 +11,9 @@ publish: clean build
 
 clean:
 	rm -rf .pytest_cache dist pgvector.egg-info
+
+docs:
+	mkdocs build
+
+docs-serve:
+	mkdocs serve
