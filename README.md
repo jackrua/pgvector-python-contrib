@@ -14,6 +14,23 @@ Run:
 pip install pgvector
 ```
 
+## Documentation
+
+Full documentation is available at the [documentation site](https://pgvector.github.io/pgvector-python/).
+
+To build the documentation locally:
+
+```sh
+pip install mkdocs mkdocs-material
+make docs
+```
+
+To serve the documentation locally:
+
+```sh
+make docs-serve
+```
+
 And follow the instructions for your database library:
 
 - [Django](#django)
