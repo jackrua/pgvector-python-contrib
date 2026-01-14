@@ -61,3 +61,80 @@ class TestBit:
     def test_equality(self):
         assert Bit([True, False, True]) == Bit([True, False, True])
         assert Bit([True, False, True]) != Bit([True, False, False])
+
+    def test_equality_with_different_type(self):
+        assert Bit([True, False, True]) != [True, False, True]
+        assert Bit([True, False, True]) != "not a bit"
+        assert Bit([True, False, True]) != None
+
+    def test_length(self):
+        assert len(Bit([True, False, True]).to_list()) == 3
+        assert len(Bit('10101010').to_list()) == 8
+
+    def test_to_text(self):
+        assert Bit([True, False, True]).to_text() == '101'
+        assert Bit('10101010').to_text() == '10101010'
+
+    def test_from_text(self):
+        bit = Bit.from_text('101')
+        assert bit.to_list() == [True, False, True]
+
+    def test_to_binary(self):
+        bit = Bit([True, False, True])
+        binary = bit.to_binary()
+        assert isinstance(binary, bytes)
+        assert len(binary) > 0
+
+    def test_from_binary(self):
+        bit = Bit([True, False, True, False, True, False, True, False])
+        binary = bit.to_binary()
+        restored = Bit.from_binary(binary)
+        assert restored == bit
+
+    def test_from_binary_error(self):
+        with pytest.raises(ValueError, match='expected bytes'):
+            Bit.from_binary('not bytes')
+
+    def test_to_db(self):
+        bit = Bit([True, False, True])
+        assert Bit._to_db(bit) == '101'
+
+    def test_to_db_error(self):
+        with pytest.raises(ValueError, match='expected bit'):
+            Bit._to_db([True, False, True])
+
+    def test_to_db_binary(self):
+        bit = Bit([True, False, True])
+        result = Bit._to_db_binary(bit)
+        assert isinstance(result, bytes)
+
+    def test_to_db_binary_error(self):
+        with pytest.raises(ValueError, match='expected bit'):
+            Bit._to_db_binary([True, False, True])
+
+    def test_empty_bit(self):
+        bit = Bit([])
+        assert bit.to_list() == []
+        assert bit.to_text() == ''
+
+    def test_single_bit(self):
+        bit = Bit([True])
+        assert bit.to_list() == [True]
+        assert bit.to_text() == '1'
+
+    def test_bytes_constructor(self):
+        bit = Bit(b'\x01')
+        assert len(bit.to_list()) == 8
+        assert bit.to_text() == '00000001'
+
+    def test_roundtrip_text(self):
+        original = Bit('10110011')
+        text = original.to_text()
+        restored = Bit.from_text(text)
+        assert restored == original
+
+    def test_roundtrip_binary(self):
+        original = Bit([True, False, True, True, False, False, True, True])
+        binary = original.to_binary()
+        restored = Bit.from_binary(binary)
+        assert restored == original
