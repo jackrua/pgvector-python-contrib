@@ -61,3 +61,33 @@ class TestBit:
     def test_equality(self):
         assert Bit([True, False, True]) == Bit([True, False, True])
         assert Bit([True, False, True]) != Bit([True, False, False])
+
+    def test_dimensions(self):
+        assert len(Bit([True, False, True]).to_list()) == 3
+
+    def test_to_db(self):
+        bit = Bit([True, False, True])
+        assert Bit._to_db(bit) == '101'
+
+    def test_to_db_invalid(self):
+        with pytest.raises(ValueError, match='expected bit'):
+            Bit._to_db([True, False, True])
+
+    def test_to_db_binary(self):
+        bit = Bit([True, False, True])
+        result = Bit._to_db_binary(bit)
+        assert result == bit.to_binary()
+
+    def test_to_db_binary_invalid(self):
+        with pytest.raises(ValueError, match='expected bit'):
+            Bit._to_db_binary([True, False, True])
+
+    def test_from_binary(self):
+        bit = Bit([True, False, True])
+        data = bit.to_binary()
+        result = Bit.from_binary(data)
+        assert result.to_list() == [True, False, True]
+
+    def test_from_binary_invalid(self):
+        with pytest.raises(ValueError, match='expected bytes'):
+            Bit.from_binary([1, 2, 3])

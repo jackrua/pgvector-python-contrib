@@ -110,3 +110,57 @@ class TestSparseVector:
         assert vec.to_list() == [1.5, 0, 2, 0, 3, 0]
         assert np.array_equal(vec.to_numpy(), [1.5, 0, 2, 0, 3, 0])
         assert vec.to_binary() == data
+
+    def test_to_db(self):
+        vec = SparseVector([1, 0, 2, 0, 3, 0])
+        assert SparseVector._to_db(vec) == '{1:1.0,3:2.0,5:3.0}/6'
+
+    def test_to_db_list(self):
+        assert SparseVector._to_db([1, 0, 2, 0, 3, 0]) == '{1:1.0,3:2.0,5:3.0}/6'
+
+    def test_to_db_none(self):
+        assert SparseVector._to_db(None) is None
+
+    def test_to_db_dim(self):
+        vec = SparseVector([1, 0, 2, 0, 3, 0])
+        assert SparseVector._to_db(vec, 6) == '{1:1.0,3:2.0,5:3.0}/6'
+
+    def test_to_db_dim_invalid(self):
+        vec = SparseVector([1, 0, 2, 0, 3, 0])
+        with pytest.raises(ValueError, match='expected 5 dimensions, not 6'):
+            SparseVector._to_db(vec, 5)
+
+    def test_to_db_binary(self):
+        vec = SparseVector([1, 0, 2, 0, 3, 0])
+        result = SparseVector._to_db_binary(vec)
+        assert result == vec.to_binary()
+
+    def test_to_db_binary_list(self):
+        result = SparseVector._to_db_binary([1, 0, 2, 0, 3, 0])
+        assert result == SparseVector([1, 0, 2, 0, 3, 0]).to_binary()
+
+    def test_to_db_binary_none(self):
+        assert SparseVector._to_db_binary(None) is None
+
+    def test_from_db_text(self):
+        result = SparseVector._from_db('{1:1.5,3:2,5:3}/6')
+        assert result.to_list() == [1.5, 0, 2, 0, 3, 0]
+
+    def test_from_db_none(self):
+        assert SparseVector._from_db(None) is None
+
+    def test_from_db_sparsevector(self):
+        vec = SparseVector([1, 0, 2, 0, 3, 0])
+        assert SparseVector._from_db(vec) is vec
+
+    def test_from_db_binary(self):
+        data = pack('>iii3i3f', 6, 3, 0, 0, 2, 4, 1.5, 2, 3)
+        result = SparseVector._from_db_binary(data)
+        assert result.to_list() == [1.5, 0, 2, 0, 3, 0]
+
+    def test_from_db_binary_none(self):
+        assert SparseVector._from_db_binary(None) is None
+
+    def test_from_db_binary_sparsevector(self):
+        vec = SparseVector([1, 0, 2, 0, 3, 0])
+        assert SparseVector._from_db_binary(vec) is vec

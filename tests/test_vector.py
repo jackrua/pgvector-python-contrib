@@ -57,3 +57,61 @@ class TestVector:
         assert vec.to_list() == [1.5, 2, 3]
         assert np.array_equal(vec.to_numpy(), [1.5, 2, 3])
         assert vec.to_binary() == data
+
+    def test_to_text(self):
+        vec = Vector([1.5, 2, 3])
+        assert vec.to_text() == '[1.5,2.0,3.0]'
+
+    def test_to_db(self):
+        vec = Vector([1, 2, 3])
+        assert Vector._to_db(vec) == '[1.0,2.0,3.0]'
+
+    def test_to_db_list(self):
+        assert Vector._to_db([1, 2, 3]) == '[1.0,2.0,3.0]'
+
+    def test_to_db_none(self):
+        assert Vector._to_db(None) is None
+
+    def test_to_db_dim(self):
+        vec = Vector([1, 2, 3])
+        assert Vector._to_db(vec, 3) == '[1.0,2.0,3.0]'
+
+    def test_to_db_dim_invalid(self):
+        vec = Vector([1, 2, 3])
+        with pytest.raises(ValueError, match='expected 2 dimensions, not 3'):
+            Vector._to_db(vec, 2)
+
+    def test_to_db_binary(self):
+        vec = Vector([1, 2, 3])
+        result = Vector._to_db_binary(vec)
+        assert result == vec.to_binary()
+
+    def test_to_db_binary_list(self):
+        result = Vector._to_db_binary([1, 2, 3])
+        assert result == Vector([1, 2, 3]).to_binary()
+
+    def test_to_db_binary_none(self):
+        assert Vector._to_db_binary(None) is None
+
+    def test_from_db_text(self):
+        result = Vector._from_db('[1.5,2,3]')
+        assert np.array_equal(result, np.array([1.5, 2, 3], dtype=np.float32))
+
+    def test_from_db_none(self):
+        assert Vector._from_db(None) is None
+
+    def test_from_db_ndarray(self):
+        arr = np.array([1, 2, 3])
+        assert Vector._from_db(arr) is arr
+
+    def test_from_db_binary(self):
+        data = pack('>HH3f', 3, 0, 1.5, 2, 3)
+        result = Vector._from_db_binary(data)
+        assert np.array_equal(result, np.array([1.5, 2, 3], dtype=np.float32))
+
+    def test_from_db_binary_none(self):
+        assert Vector._from_db_binary(None) is None
+
+    def test_from_db_binary_ndarray(self):
+        arr = np.array([1, 2, 3])
+        assert Vector._from_db_binary(arr) is arr

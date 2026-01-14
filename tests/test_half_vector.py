@@ -57,3 +57,61 @@ class TestHalfVector:
         assert vec.to_list() == [1.5, 2, 3]
         assert np.array_equal(vec.to_numpy(), [1.5, 2, 3])
         assert vec.to_binary() == data
+
+    def test_to_text(self):
+        vec = HalfVector([1.5, 2, 3])
+        assert vec.to_text() == '[1.5,2.0,3.0]'
+
+    def test_to_db(self):
+        vec = HalfVector([1, 2, 3])
+        assert HalfVector._to_db(vec) == '[1.0,2.0,3.0]'
+
+    def test_to_db_list(self):
+        assert HalfVector._to_db([1, 2, 3]) == '[1.0,2.0,3.0]'
+
+    def test_to_db_none(self):
+        assert HalfVector._to_db(None) is None
+
+    def test_to_db_dim(self):
+        vec = HalfVector([1, 2, 3])
+        assert HalfVector._to_db(vec, 3) == '[1.0,2.0,3.0]'
+
+    def test_to_db_dim_invalid(self):
+        vec = HalfVector([1, 2, 3])
+        with pytest.raises(ValueError, match='expected 2 dimensions, not 3'):
+            HalfVector._to_db(vec, 2)
+
+    def test_to_db_binary(self):
+        vec = HalfVector([1, 2, 3])
+        result = HalfVector._to_db_binary(vec)
+        assert result == vec.to_binary()
+
+    def test_to_db_binary_list(self):
+        result = HalfVector._to_db_binary([1, 2, 3])
+        assert result == HalfVector([1, 2, 3]).to_binary()
+
+    def test_to_db_binary_none(self):
+        assert HalfVector._to_db_binary(None) is None
+
+    def test_from_db_text(self):
+        result = HalfVector._from_db('[1.5,2,3]')
+        assert result.to_list() == [1.5, 2, 3]
+
+    def test_from_db_none(self):
+        assert HalfVector._from_db(None) is None
+
+    def test_from_db_halfvector(self):
+        vec = HalfVector([1, 2, 3])
+        assert HalfVector._from_db(vec) is vec
+
+    def test_from_db_binary(self):
+        data = pack('>HH3e', 3, 0, 1.5, 2, 3)
+        result = HalfVector._from_db_binary(data)
+        assert result.to_list() == [1.5, 2, 3]
+
+    def test_from_db_binary_none(self):
+        assert HalfVector._from_db_binary(None) is None
+
+    def test_from_db_binary_halfvector(self):
+        vec = HalfVector([1, 2, 3])
+        assert HalfVector._from_db_binary(vec) is vec
