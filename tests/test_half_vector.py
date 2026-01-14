@@ -43,6 +43,11 @@ class TestHalfVector:
         assert HalfVector([1, 2, 3]) == HalfVector([1, 2, 3])
         assert HalfVector([1, 2, 3]) != HalfVector([1, 2, 4])
 
+    def test_equality_with_different_type(self):
+        assert HalfVector([1, 2, 3]) != [1, 2, 3]
+        assert HalfVector([1, 2, 3]) != "not a vector"
+        assert HalfVector([1, 2, 3]) != None
+
     def test_dimensions(self):
         assert HalfVector([1, 2, 3]).dimensions() == 3
 

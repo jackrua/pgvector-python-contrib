@@ -62,6 +62,11 @@ class TestBit:
         assert Bit([True, False, True]) == Bit([True, False, True])
         assert Bit([True, False, True]) != Bit([True, False, False])
 
+    def test_equality_with_different_type(self):
+        assert Bit([True, False, True]) != [True, False, True]
+        assert Bit([True, False, True]) != "not a bit"
+        assert Bit([True, False, True]) != None
+
     def test_length(self):
         assert len(Bit([True, False, True]).to_list()) == 3
         assert len(Bit('10101010').to_list()) == 8

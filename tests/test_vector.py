@@ -43,6 +43,11 @@ class TestVector:
         assert Vector([1, 2, 3]) == Vector([1, 2, 3])
         assert Vector([1, 2, 3]) != Vector([1, 2, 4])
 
+    def test_equality_with_different_type(self):
+        assert Vector([1, 2, 3]) != [1, 2, 3]
+        assert Vector([1, 2, 3]) != "not a vector"
+        assert Vector([1, 2, 3]) != None
+
     def test_dimensions(self):
         assert Vector([1, 2, 3]).dimensions() == 3
 

@@ -67,6 +67,12 @@ class TestSparseVector:
         assert vec.to_list() == [1, 0, 2, 0, 3, 0]
         assert vec.indices() == [0, 2, 4]
 
+    def test_sparse_array_wrong_ndim(self):
+        # 2D array with wrong shape
+        arr = coo_array(np.array([[1, 0, 2], [0, 3, 0]]))
+        with pytest.raises(ValueError, match='expected ndim to be 1'):
+            SparseVector(arr)
+
     def test_repr(self):
         assert repr(SparseVector([1, 0, 2, 0, 3, 0])) == 'SparseVector({0: 1.0, 2: 2.0, 4: 3.0}, 6)'
         assert str(SparseVector([1, 0, 2, 0, 3, 0])) == 'SparseVector({0: 1.0, 2: 2.0, 4: 3.0}, 6)'
@@ -76,6 +82,11 @@ class TestSparseVector:
         assert SparseVector([1, 0, 2, 0, 3, 0]) != SparseVector([1, 0, 2, 0, 3, 1])
         assert SparseVector([1, 0, 2, 0, 3, 0]) == SparseVector({2: 2, 4: 3, 0: 1, 3: 0}, 6)
         assert SparseVector({}, 1) != SparseVector({}, 2)
+
+    def test_equality_with_different_type(self):
+        assert SparseVector([1, 0, 2, 0, 3, 0]) != [1, 0, 2, 0, 3, 0]
+        assert SparseVector([1, 0, 2, 0, 3, 0]) != "not a sparse vector"
+        assert SparseVector([1, 0, 2, 0, 3, 0]) != None
 
     def test_dimensions(self):
         assert SparseVector([1, 0, 2, 0, 3, 0]).dimensions() == 6
