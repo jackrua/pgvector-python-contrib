@@ -68,7 +68,7 @@ class TestSparseVector:
         assert vec.indices() == [0, 2, 4]
 
     def test_sparse_array_wrong_ndim(self):
-        # 2D array with wrong shape
+        # 2D array with wrong ndim (not 1D as required)
         arr = coo_array(np.array([[1, 0, 2], [0, 3, 0]]))
         with pytest.raises(ValueError, match='expected ndim to be 1'):
             SparseVector(arr)
