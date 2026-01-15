@@ -1,0 +1,58 @@
+# Cloudflare Workers/Pages configuration for pgvector-python
+# This configuration can be used to deploy examples or documentation to Cloudflare
+
+name = "pgvector-python"
+compatibility_date = "2026-01-15"
+
+# Main entry point (can be customized based on your needs)
+# main = "src/index.js"
+
+# For Pages deployments, uncomment and set the build output directory
+# pages_build_output_dir = "./dist"
+
+# Workers dev mode (default: true for local development)
+workers_dev = true
+
+# Account ID (set this to your Cloudflare account ID when deploying)
+# account_id = ""
+
+# Route configuration (uncomment and customize for production deployments)
+# [[routes]]
+# pattern = "example.com/*"
+# zone_name = "example.com"
+
+# Environment variables
+# [vars]
+# API_KEY = "your-api-key"
+
+# KV Namespaces (for Workers KV storage)
+# [[kv_namespaces]]
+# binding = "KV"
+# id = "your-kv-namespace-id"
+
+# D1 Databases (for serverless SQL databases)
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "pgvector-db"
+# database_id = "your-database-id"
+
+# R2 Buckets (for object storage)
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+# Compatibility flags
+# [compatibility_flags]
+
+# Build configuration
+# [build]
+# command = "npm run build"
+
+# Environment-specific configurations
+# [env.staging]
+# name = "pgvector-python-staging"
+# workers_dev = false
+
+# [env.production]
+# name = "pgvector-python-production"
+# workers_dev = false
